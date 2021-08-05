@@ -70,6 +70,7 @@ class CategoryScraper extends Scraper {
     }
 
     _isRecaptchaPage = () => {
+        console.log(this.page.url())
         return !!this.page.url().match(/google/)
     }
     _scrapeMainCategory = async () => {
