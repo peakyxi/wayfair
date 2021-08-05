@@ -19,6 +19,7 @@ class CategoryScraper extends Scraper {
             return await this._run()
         } catch (err) {
             if (err.message === 'google recaptcha') {
+                console.log(err.message)
                 await this.init()
                 return await this.run()
             } else {
