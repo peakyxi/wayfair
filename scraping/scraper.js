@@ -36,6 +36,7 @@ class Scraper {
             fs.mkdirSync(this.tempDir)
     }
     setProxy = (address, port, username = null, password = null) => {
+        console.log(address, port)
         this.puppeteer.use(pluginProxy({
             address,
             port,
