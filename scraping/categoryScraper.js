@@ -57,7 +57,7 @@ class CategoryScraper extends Scraper {
         const parentCategories = await Category.find({ type: parentType })
         for (const parentCategory of parentCategories) {
             const { _id, url } = parentCategory
-            if (!this._isCatUrl) continue
+            if (!this._isCatUrl(url)) continue
             await this.page.goto(url)
             if (this._isRecaptchaPage()) throw new Error('google recaptcha')
             if (!await this._isCatPage()) continue
@@ -98,7 +98,7 @@ class CategoryScraper extends Scraper {
     }
 
     _isCatUrl = (url) => {
-        return url.match(/\/cat\/[^\/]+$/)
+        return !!url.match(/\/cat\/[^\/]+$/)
     }
     _isCatPage = async () => {
         return await this.page.$('div.CategoryLandingPageNavigation')
