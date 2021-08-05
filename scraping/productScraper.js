@@ -2,7 +2,8 @@ import Scraper from './scraper.js'
 import Category from '../models/category.js'
 import Product from '../models/product.js'
 import Process from '../models/process.js'
-
+import config from 'config'
+const [proxyIp, proxyPort] = config.get('proxy').split(":")
 class ProductScraper extends Scraper {
     constructor(id) {
         return (async () => {

@@ -1,18 +1,24 @@
 import Scraper from './scraper.js'
 import Category from '../models/category.js'
-
+import config from 'config'
+const [proxyIp, proxyPort] = config.get('proxy').split(":")
 
 
 class CategoryScraper extends Scraper {
     constructor(id) {
         return (async () => {
             super(id)
+            this.proxyIp = proxyIp
+            this.proxyPort = proxyPort
             await this.init()
             this.page = this.pages[0]
+
             return this
         })()
 
     }
+
+
     run = async () => {
         try {
             return await this._run()

@@ -1,6 +1,8 @@
 import Puppeteer from './puppeteer.js'
 import pluginProxy from 'puppeteer-extra-plugin-proxy'
+
 import fs from 'fs'
+
 class Scraper {
     constructor(id) {
 
@@ -16,6 +18,7 @@ class Scraper {
     init = async () => {
         const puppeteer = new Puppeteer()
         this.puppeteer = puppeteer
+        this.setProxy()
         this.createDirs()
         const browser = await puppeteer.launch(this.userDataDir)
         const context = await browser.createIncognitoBrowserContext();
@@ -33,13 +36,13 @@ class Scraper {
         if (!fs.existsSync(this.tempDir))
             fs.mkdirSync(this.tempDir)
     }
-    setProxy = ({ address, port, username, password }) => {
+    setProxy = () => {
         this.puppeteer.use(pluginProxy({
-            address,
-            port,
+            address: this.proxyIp,
+            port: this.proxyPort,
             credentials: {
-                username,
-                password
+                username: null,
+                password: null
             }
 
         }))
