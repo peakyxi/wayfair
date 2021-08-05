@@ -1,11 +1,17 @@
 import puppet from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+import pluginProxy from 'puppeteer-extra-plugin-proxy'
 puppet.use(StealthPlugin())
 import config from 'config'
+const [proxyIp, proxyPort] = config.get('proxy').split(":")
+
 const chromePath = config.get('chrome_path')
 const headless = config.get('headless')
 const userAgent = config.get('userAgent')
 class Puppeteer {
+    constructor() {
+        this.setProxy()
+    }
 
     args = [
         "--no-sandbox",
@@ -28,7 +34,18 @@ class Puppeteer {
         const options = { ...this.options, userDataDir }
         return puppet.launch(options)
     }
-    use = puppet.use
+    setProxy = () => {
+
+        puppet.use(pluginProxy({
+            address: proxyIp,
+            port: proxyPort,
+            credentials: {
+                username: null,
+                password: null
+            }
+
+        }))
+    }
 }
 
 export default Puppeteer

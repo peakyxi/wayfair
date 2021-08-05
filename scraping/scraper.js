@@ -1,5 +1,5 @@
 import Puppeteer from './puppeteer.js'
-import pluginProxy from 'puppeteer-extra-plugin-proxy'
+
 
 import fs from 'fs'
 
@@ -35,18 +35,7 @@ class Scraper {
         if (!fs.existsSync(this.tempDir))
             fs.mkdirSync(this.tempDir)
     }
-    setProxy = (address, port, username = null, password = null) => {
-        console.log(address, port)
-        this.puppeteer.use(pluginProxy({
-            address,
-            port,
-            credentials: {
-                username,
-                password
-            }
 
-        }))
-    }
 
 
 
