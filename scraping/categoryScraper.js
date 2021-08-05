@@ -47,7 +47,7 @@ class CategoryScraper extends Scraper {
 
     scrapeMainCategory = async () => {
         await this.page.goto('https://www.wayfair.com/')
-        if (this._isRecaptchaPage) throw new Error('google recaptcha')
+        if (this._isRecaptchaPage()) throw new Error('google recaptcha')
         let categories = await this._scrapeMainCategory()
         categories = await this._addTypesCategory(categories, 'mainCategory', '-1')
         await this._saveCategory(categories)
@@ -59,7 +59,7 @@ class CategoryScraper extends Scraper {
             const { _id, url } = parentCategory
             if (!this._isCatUrl) continue
             await this.page.goto(url)
-            if (this._isRecaptchaPage) throw new Error('google recaptcha')
+            if (this._isRecaptchaPage()) throw new Error('google recaptcha')
             if (!await this._isCatPage()) continue
             let categories = await this._scrapeGeneralCategory()
             categories = this._addTypesCategory(categories, type, _id)
