@@ -72,7 +72,7 @@ class ProductScraper extends Scraper {
     _updateProcess = async (process, upsert = false) => {
         const position = { pageIndex: this.pageIndex, listIndex: this.listIndex, itemIndex: this.itemIndex }
         process['position'] = position
-        return Process.findOneAndUpdate({ belong: this.id }, process, { upsert, new: true })
+        return Process.findOneAndUpdate({ belong: this.id }, process, { upsert, new: true, useFindAndModify: false })
             .populate('belong')
             .lean()
             .then(doc => {

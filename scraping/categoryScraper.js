@@ -26,6 +26,7 @@ class CategoryScraper extends Scraper {
 
     _run = async () => {
         await this.scrapeMainCategory()
+        await this.page.waitForTimeout(900000)
         await this.scrapeGeneralCategory('mainCategory', 'subCategory')
         await this.scrapeGeneralCategory('subCategory', 'itemCategory')
         await this.scrapeGeneralCategory('itemCategory', 'subItemCategory')
