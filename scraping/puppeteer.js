@@ -4,6 +4,7 @@ puppet.use(StealthPlugin())
 import config from 'config'
 const chromePath = config.get('chrome_path')
 const headless = config.get('headless')
+const userAgent = congig.get('userAgent')
 class Puppeteer {
 
     args = [
@@ -13,7 +14,7 @@ class Puppeteer {
         "--window-position=0,0",
         "--ignore-certifcate-errors",
         "--ignore-certifcate-errors-spki-list",
-        '--user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"'
+        `--user-agent="${userAgent}"`
     ]
     options = {
         ignoreHTTPSErrors: true,
