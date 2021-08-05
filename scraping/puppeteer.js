@@ -38,11 +38,7 @@ class Puppeteer {
 
         puppet.use(pluginProxy({
             address: proxyIp,
-            port: proxyPort,
-            credentials: {
-                username: null,
-                password: null
-            }
+            port: proxyPort
 
         }))
     }
