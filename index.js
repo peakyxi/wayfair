@@ -3,7 +3,7 @@ import config from 'config'
 import cors from 'cors'
 import './db.js'
 import category from './routes/category.js'
-// import product from './routes/product.js'
+
 import process from './routes/process.js'
 
 const port = config.get('port')
@@ -14,7 +14,7 @@ app.use(express.json())
 app.use(cors())
 
 app.use('/api/categories', category)
-// app.use('/api/products', product)
+
 app.use('/api/processes', process)
 
 

@@ -111,7 +111,7 @@ class ProductScraper extends Scraper {
         urls = urls.slice(this.listIndex)
         return urls
     }
-    parsePage = async (urls) => {
+    parsePage = async (url) => {
         await this.page2.goto(url)
         const count = await this.page2.evaluate(() => [...document.querySelectorAll('.pl-Pagination > *')].filter(ele => Number.parseInt(ele.innerText)).pop())
         let urls = [...Array(count)].map((_, i) => `${this.url}?curpage=${i + 1}`)
