@@ -4,7 +4,7 @@ puppet.use(StealthPlugin())
 import config from 'config'
 const chromePath = config.get('chrome_path')
 const headless = config.get('headless')
-const userAgent = congig.get('userAgent')
+const userAgent = config.get('userAgent')
 class Puppeteer {
 
     args = [
