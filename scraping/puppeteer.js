@@ -3,7 +3,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import pluginProxy from 'puppeteer-extra-plugin-proxy'
 puppet.use(StealthPlugin())
 import config from 'config'
-const [proxyIp, proxyPort] = config.get('proxy').split(":")
+const [proxyIp, proxyPort] = config.get('proxy3').split(":")
 
 const chromePath = config.get('chrome_path')
 const headless = config.get('headless')
