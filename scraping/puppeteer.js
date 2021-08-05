@@ -28,6 +28,7 @@ class Puppeteer {
         const options = { ...this.options, userDataDir }
         return puppet.launch(options)
     }
+    use = puppet.use
 }
 
 export default Puppeteer
