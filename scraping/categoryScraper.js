@@ -31,9 +31,9 @@ class CategoryScraper extends Scraper {
 
     _run = async () => {
 
-        await this.scrapeMainCategory()
-        await this.scrapeGeneralCategory('mainCategory', 'subCategory')
-        await this.scrapeGeneralCategory('subCategory', 'itemCategory')
+        // await this.scrapeMainCategory()
+        // await this.scrapeGeneralCategory('mainCategory', 'subCategory')
+        // await this.scrapeGeneralCategory('subCategory', 'itemCategory')
         await this.scrapeGeneralCategory('itemCategory', 'subItemCategory')
         await this.browser.close()
     }
@@ -71,7 +71,7 @@ class CategoryScraper extends Scraper {
 
     _isRecaptchaPage = () => {
         console.log(this.page.url())
-        return !!this.page.url().match(/google/)
+        return !!this.page.url().match(/captcha/)
     }
     _scrapeMainCategory = async () => {
         return await this.page.evaluate(() => [...document.querySelectorAll('ul.DepartmentList-list > li.DepartmentItem')]
