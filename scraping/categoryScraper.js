@@ -8,9 +8,8 @@ class CategoryScraper extends Scraper {
     constructor(id) {
         return (async () => {
             super(id)
-            this.proxyIp = proxyIp
-            this.proxyPort = proxyPort
             await this.init()
+            this.setProxy(proxyIp, proxyPort)
             this.page = this.pages[0]
 
             return this
