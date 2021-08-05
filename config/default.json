@@ -1,6 +1,7 @@
 {
     "port": 40000,
     "db": "mongodb://localhost:27017/wayfair",
-    "chrome_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    "headless": false
+    "chrome_path": "C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe",
+    "headless": false,
+    "userAgent": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"
 }
