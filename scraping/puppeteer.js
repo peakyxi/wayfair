@@ -24,15 +24,14 @@ class Puppeteer {
     ]
     options = {
         ignoreHTTPSErrors: true,
-        userDataDir: '',
         executablePath: chromePath,
         headless: headless,
         defaultViewport: null,
         args: this.args
     }
-    launch = (userDataDir) => {
-        const options = { ...this.options, userDataDir }
-        return puppet.launch(options)
+    launch = () => {
+
+        return puppet.launch(this.options)
     }
     setProxy = () => {
 

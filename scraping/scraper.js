@@ -11,15 +11,15 @@ class Scraper {
         this.browser = null
         this.context = null
         this.pages = []
-        this.tempDir = 'temp'
-        this.userDataDir = `${this.tempDir}/temp_${id}`
+        // this.tempDir = 'temp'
+        // this.userDataDir = `${this.tempDir}/temp_${id}`
 
     }
     init = async () => {
         const puppeteer = new Puppeteer()
         this.puppeteer = puppeteer
-        this.createDirs()
-        const browser = await puppeteer.launch(this.userDataDir)
+
+        const browser = await puppeteer.launch()
         const context = await browser.createIncognitoBrowserContext();
         await context.newPage()
         await context.newPage()
