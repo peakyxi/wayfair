@@ -99,11 +99,15 @@ class ProductScraper extends Scraper {
 
     parseList = async (pageUrl) => {
         await this.gotoList(pageUrl)
-        return await this._parseList()
+
     }
 
     gotoList = async (pageUrl) => {
         await this.page2.goto(pageUrl)
+        while (this._isRecaptchaPage(page)) {
+            this.init()
+            await this.page2.goto(pageUrl)
+        }
     }
 
     _parseList = async () => {
@@ -114,6 +118,10 @@ class ProductScraper extends Scraper {
     }
     parsePage = async (url) => {
         await this.page2.goto(url)
+        while (this._isRecaptchaPage(page)) {
+            this.init()
+            await this.page2.goto(url)
+        }
         const count = await this.page2.evaluate(() => [...document.querySelectorAll('.pl-Pagination > *')].filter(ele => Number.parseInt(ele.innerText)).pop())
         let urls = [...Array(count)].map((_, i) => `${this.url}?curpage=${i + 1}`)
         // urls = urls.slice(this.pageIndex)
@@ -124,12 +132,20 @@ class ProductScraper extends Scraper {
     gotoDetail = async (url) => {
         if (this.page.url() === url) return
         await this.page.goto(url)
+        while (this._isRecaptchaPage(page)) {
+            this.init()
+            await this.page2.goto(pageUrl)
+        }
         await this.page.waitForFunction(() => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
     }
 
     parseDetail = async (detailUrl) => {
         await this.gotoDetail(detailUrl)
         await this._parseDetail()
+    }
+    _isRecaptchaPage = (page) => {
+        console.log(page.url())
+        return !!page.url().match(/captcha/)
     }
     _parseDetail = async () => {
         const item = await this.page.evaluate(() => document.querySelector('.ProductDetailInfoBlock-header >h1').innerText)
