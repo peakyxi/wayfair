@@ -8,8 +8,6 @@ class CategoryScraper extends Scraper {
         return (async () => {
             super(id)
             await this.init()
-            this.page = this.pages[0]
-
             return this
         })()
 
@@ -20,13 +18,19 @@ class CategoryScraper extends Scraper {
         try {
             return await this._run()
         } catch (err) {
-            await this.browser.close()
+            if (err.message === 'google recaptcha') {
+                await this.init()
+                return await this.run()
+            } else {
+                await this.browser.close()
+            }
+
         }
     }
 
     _run = async () => {
+
         await this.scrapeMainCategory()
-        await this.page.waitForTimeout(900000)
         await this.scrapeGeneralCategory('mainCategory', 'subCategory')
         await this.scrapeGeneralCategory('subCategory', 'itemCategory')
         await this.scrapeGeneralCategory('itemCategory', 'subItemCategory')
@@ -42,6 +46,7 @@ class CategoryScraper extends Scraper {
 
     scrapeMainCategory = async () => {
         await this.page.goto('https://www.wayfair.com/')
+        if (this._isRecaptchaPage) throw new Error('google recaptcha')
         let categories = await this._scrapeMainCategory()
         categories = await this._addTypesCategory(categories, 'mainCategory', '-1')
         await this._saveCategory(categories)
@@ -53,6 +58,7 @@ class CategoryScraper extends Scraper {
             const { _id, url } = parentCategory
             if (!this._isCatUrl) continue
             await this.page.goto(url)
+            if (this._isRecaptchaPage) throw new Error('google recaptcha')
             if (!await this._isCatPage()) continue
             let categories = await this._scrapeGeneralCategory()
             categories = this._addTypesCategory(categories, type, _id)
@@ -62,6 +68,9 @@ class CategoryScraper extends Scraper {
 
     }
 
+    _isRecaptchaPage = () => {
+        return !!this.page.url().match(/google/)
+    }
     _scrapeMainCategory = async () => {
         return await this.page.evaluate(() => [...document.querySelectorAll('ul.DepartmentList-list > li.DepartmentItem')]
             .filter(ele => !ele.classList.contains('DepartmentItem--sale'))

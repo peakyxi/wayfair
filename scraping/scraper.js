@@ -16,6 +16,10 @@ class Scraper {
 
     }
     init = async () => {
+        if (this.browser) {
+            await this.browser.close
+            this.puppeteer = null
+        }
         const puppeteer = new Puppeteer()
         this.puppeteer = puppeteer
 
