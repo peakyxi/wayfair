@@ -114,7 +114,6 @@ class ProductScraper extends Scraper {
     _parseList = async () => {
         let urls = await this.page2.evaluate(() => [...document.querySelectorAll('#sbprodgrid > div > div')].slice(0, 48)
             .map(ele => ele.querySelector('a').href))
-        urls = urls.slice(this.listIndex)
         return urls
     }
     parsePage = async (url) => {
@@ -126,10 +125,14 @@ class ProductScraper extends Scraper {
         }
         const count = await this.page2.evaluate(() => [...document.querySelectorAll('.pl-Pagination > *')].map(ele => parseInt(ele.innerText)).filter(num => !!num).pop())
         let urls = [...Array(count)].map((_, i) => `${url}?curpage=${i + 1}`)
-        // urls = urls.slice(this.pageIndex)
+
         return urls
 
 
+    }
+    parseDetail = async (detailUrl) => {
+        await this.gotoDetail(detailUrl)
+        return await this._parseDetail()
     }
     gotoDetail = async (url) => {
         console.log('detail url ', url)
@@ -142,14 +145,6 @@ class ProductScraper extends Scraper {
         await this.page.waitForFunction(() => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
     }
 
-    parseDetail = async (detailUrl) => {
-        await this.gotoDetail(detailUrl)
-        return await this._parseDetail()
-    }
-    _isRecaptchaPage = (page) => {
-        console.log(page.url())
-        return !!page.url().match(/captcha/)
-    }
     _parseDetail = async () => {
         const item = await this.page.evaluate(() => document.querySelector('.ProductDetailInfoBlock-header >h1').innerText)
         const description = await this.page.evaluate(() => document.querySelector('.OverviewPreviewExpansion').innerText.replace('See More', ''))
@@ -204,6 +199,9 @@ class ProductScraper extends Scraper {
         return { item, description, image_url, ...WeightsDimensions, specifications, ...features, ...assembly, ...warranty }
 
 
+    }
+    _isRecaptchaPage = (page) => {
+        return !!page.url().match(/captcha/)
     }
 }
 
