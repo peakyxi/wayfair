@@ -136,9 +136,9 @@ class ProductScraper extends Scraper {
         console.log('detail url ', url)
         if (this.page.url() === url) return
         await this.page.goto(url)
-        while (this._isRecaptchaPage(page)) {
+        while (this._isRecaptchaPage(this.page)) {
             this.init()
-            await this.page2.goto(pageUrl)
+            await this.page.goto(url)
         }
         await this.page.waitForFunction(() => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
     }
