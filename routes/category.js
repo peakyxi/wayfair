@@ -38,11 +38,7 @@ router.post('/scraping/reset', async (req, res) => {
         .then(doc => res.send(doc))
 
 })
-// router.get('/scraping/status', async (req, res) => {
-//     Status.findOne({ action: 'categoryScraper' })
-//         .then(doc => res.send(doc))
 
-// })
 
 router.post('/scraping', async (req, res) => {
     if (scraper) return res.send({ status: "running" })

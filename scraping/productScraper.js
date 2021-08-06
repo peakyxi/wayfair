@@ -98,7 +98,9 @@ class ProductScraper extends Scraper {
     }
 
     parseList = async (pageUrl) => {
+        console.log('pageUrl', pageUrl)
         await this.gotoList(pageUrl)
+        await this._parseList()
 
     }
 
@@ -117,6 +119,7 @@ class ProductScraper extends Scraper {
         return urls
     }
     parsePage = async (url) => {
+        console.log('start url', url)
         await this.page2.goto(url)
         while (this._isRecaptchaPage(page)) {
             this.init()
