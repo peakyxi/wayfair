@@ -143,9 +143,9 @@ class ProductScraper extends Scraper {
             await this.goto(this.page, url)
         }
         await this.page.bringToFront()
-        await this.waitForFunction(this.page, url, () => !![...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More'))
-        await this.page.evaluate(() => [...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More').click())
-        await this.waitForFunction(this.page, url, () => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
+        // await this.waitForFunction(this.page, url, () => !![...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More'))
+        // await this.page.evaluate(() => [...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More').click())
+        // await this.waitForFunction(this.page, url, () => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
     }
 
     _parseDetail = async () => {
