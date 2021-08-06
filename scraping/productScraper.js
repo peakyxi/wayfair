@@ -106,7 +106,10 @@ class ProductScraper extends Scraper {
 
     gotoList = async (pageUrl) => {
         await this.goto(this.page2, pageUrl)
-
+        while (this._isRecaptchaPage(this.page2)) {
+            await this.init()
+            await this.goto(this.page, pageUrl)
+        }
     }
 
     _parseList = async () => {
@@ -117,6 +120,10 @@ class ProductScraper extends Scraper {
     parsePage = async (url) => {
         console.log('start url', url)
         await this.goto(this.page2, url)
+        while (this._isRecaptchaPage(this.page2)) {
+            await this.init()
+            await this.goto(this.page2, url)
+        }
         const count = await this.page2.evaluate(() => [...document.querySelectorAll('.pl-Pagination > *')].map(ele => parseInt(ele.innerText)).filter(num => !!num).pop())
         let urls = [...Array(count)].map((_, i) => `${url}?curpage=${i + 1}`)
 
@@ -131,6 +138,10 @@ class ProductScraper extends Scraper {
     gotoDetail = async (url) => {
         console.log('detail url ', url)
         await this.goto(this.page, url)
+        while (this._isRecaptchaPage(this.page)) {
+            await this.init()
+            await this.goto(this.page, url)
+        }
         await this.page.bringToFront()
         await this.waitForFunction(this.page, () => !![...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More'))
         await this.page.evaluate(() => [...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More').click())
@@ -196,16 +207,13 @@ class ProductScraper extends Scraper {
     goto = async (page, url) => {
         try {
             await page.goto(url, { waitUntil: "networkidle2" })
-            if (this._isRecaptchaPage(page)) {
-                throw new Error('google recaptcha error')
-            }
+
         } catch (err) {
             console.log(err)
-            if (!err.message.match(/google recaptcha error|Navigation timeout of/))
-                return await this.browser.close()
-            if (!!err.message.match(/google recaptcha error/))
-                await this.init()
-            return await this.goto(page, url)
+            if (!!err.message.match(/Navigation timeout of/))
+                return await this.goto(page, url)
+            return await this.browser.close()
+
 
         }
 
