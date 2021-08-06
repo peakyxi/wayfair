@@ -132,6 +132,7 @@ class ProductScraper extends Scraper {
         console.log('detail url ', url)
         await this.goto(this.page, url)
         await this.page.bringToFront()
+        await this.page.waitForFunction(() => !![...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More'))
         await this.page.evaluate(() => [...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More').click())
         await this.page.waitForFunction(() => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
     }
