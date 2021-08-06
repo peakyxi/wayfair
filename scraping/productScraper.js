@@ -105,24 +105,24 @@ class ProductScraper extends Scraper {
     }
 
     gotoList = async (pageUrl) => {
-        await this.page2.goto(pageUrl)
+        await this.page2.goto(pageUrl, { waitUntil: "networkidle0" })
         while (this._isRecaptchaPage(this.page2)) {
             this.init()
-            await this.page2.goto(pageUrl)
+            await this.page2.goto(pageUrl, { waitUntil: "networkidle0" })
         }
     }
 
     _parseList = async () => {
-        let urls = await this.page2.evaluate(() => [...document.querySelectorAll('#sbprodgrid > div > div')].slice(0, 48)
+        let urls = await this.page2.evaluate(() => [...document.querySelector('#sbprodgrid > div').children].slice(0, -3)
             .map(ele => ele.querySelector('a').href))
         return urls
     }
     parsePage = async (url) => {
         console.log('start url', url)
-        await this.page2.goto(url)
+        await this.page2.goto(url, { waitUntil: "networkidle0" })
         while (this._isRecaptchaPage(this.page2)) {
             this.init()
-            await this.page2.goto(url)
+            await this.page2.goto(url, { waitUntil: "networkidle0" })
         }
         const count = await this.page2.evaluate(() => [...document.querySelectorAll('.pl-Pagination > *')].map(ele => parseInt(ele.innerText)).filter(num => !!num).pop())
         let urls = [...Array(count)].map((_, i) => `${url}?curpage=${i + 1}`)
@@ -137,10 +137,10 @@ class ProductScraper extends Scraper {
     }
     gotoDetail = async (url) => {
         console.log('detail url ', url)
-        await this.page.goto(url)
+        await this.page.goto(url, { waitUntil: "networkidle0" })
         while (this._isRecaptchaPage(this.page)) {
             this.init()
-            await this.page.goto(url)
+            await this.page.goto(url, { waitUntil: "networkidle0" })
         }
         await this.page.bringToFront()
         await this.page.evaluate(() => [...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More').click())
