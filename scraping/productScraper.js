@@ -100,7 +100,7 @@ class ProductScraper extends Scraper {
     parseList = async (pageUrl) => {
         console.log('pageUrl', pageUrl)
         await this.gotoList(pageUrl)
-        await this._parseList()
+        return await this._parseList()
 
     }
 
