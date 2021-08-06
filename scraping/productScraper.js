@@ -145,7 +145,7 @@ class ProductScraper extends Scraper {
 
     parseDetail = async (detailUrl) => {
         await this.gotoDetail(detailUrl)
-        await this._parseDetail()
+        return await this._parseDetail()
     }
     _isRecaptchaPage = (page) => {
         console.log(page.url())
