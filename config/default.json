@@ -4,7 +4,7 @@
     "chrome_path": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
     "headless": false,
     "userAgent": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36",
-    "proxy": "5.79.66.2:13010",
+    "proxy": "5.79.73.131:13010",
     "proxy3": "69.30.240.226:15001",
     "proxy15": "63.141.241.98:16001"
 }
