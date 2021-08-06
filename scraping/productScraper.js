@@ -61,7 +61,6 @@ class ProductScraper extends Scraper {
             for (const pageUrl of pageUrls) {
                 const detailUrls = await this.parseList(pageUrl)
                 for (const detailUrl of detailUrls) {
-                    console.log(detailUrl)
                     const detail = await this.parseDetail(detailUrl)
                     await this._saveProduct(detail)
                 }
@@ -158,7 +157,7 @@ class ProductScraper extends Scraper {
         const WeightsDimensions = await this.page.evaluate(() => {
             const prefix = 'Weights & Dimensions'
             return [...document.querySelectorAll('.ProductWeightsDimensions dl.pl-DescriptionList > dt')].reduce((ret, dt) => {
-                const key = `${pefix} dt.innerText`
+                const key = `${prefix} dt.innerText`
                 const value = dt.nextElementSibling.innerText
                 ret[key] = value
                 return ret
