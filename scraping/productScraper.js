@@ -143,9 +143,9 @@ class ProductScraper extends Scraper {
             await this.goto(this.page, url)
         }
         await this.page.bringToFront()
-        await this.waitForFunction(this.page, () => !![...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More'))
+        await this.waitForFunction(this.page, url, () => !![...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More'))
         await this.page.evaluate(() => [...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More').click())
-        await this.waitForFunction(this.page, () => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
+        await this.waitForFunction(this.page, url, () => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
     }
 
     _parseDetail = async () => {
@@ -218,14 +218,15 @@ class ProductScraper extends Scraper {
         }
 
     }
-    waitForFunction = async (page, fun) => {
+    waitForFunction = async (page, url, fun) => {
         try {
             await page.waitForFunction(fun)
         } catch (err) {
-            await page.reload()
-            await this.waitForFunction(page, fun)
+            await this.goto(page, url)
+            await this.waitForFunction(page, url, fun)
         }
     }
+
     _isRecaptchaPage = (page) => {
         return !!page.url().match(/captcha/)
     }
