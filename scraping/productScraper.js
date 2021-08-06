@@ -204,28 +204,7 @@ class ProductScraper extends Scraper {
 
 
     }
-    goto = async (page, url) => {
-        try {
-            await page.goto(url, { waitUntil: "networkidle2" })
 
-        } catch (err) {
-            console.log(err)
-            if (!!err.message.match(/Navigation timeout of|ERR_CONNECTION_RESET/))
-                return await this.goto(page, url)
-            return await this.browser.close()
-
-
-        }
-
-    }
-    waitForFunction = async (page, url, fun) => {
-        try {
-            await page.waitForFunction(fun)
-        } catch (err) {
-            await this.goto(page, url)
-            await this.waitForFunction(page, url, fun)
-        }
-    }
 
     _isRecaptchaPage = (page) => {
         return !!page.url().match(/captcha/)

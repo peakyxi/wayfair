@@ -18,6 +18,7 @@ class CategoryScraper extends Scraper {
         try {
             return await this._run()
         } catch (err) {
+            console.log(err)
             await this.browser.close()
 
         }
@@ -40,7 +41,7 @@ class CategoryScraper extends Scraper {
 
 
     scrapeMainCategory = async () => {
-        await this.page.goto('https://www.wayfair.com/')
+        await this.goto(this.page, 'https://www.wayfair.com/')
         let categories = await this._scrapeMainCategory()
         categories = await this._addTypesCategory(categories, 'mainCategory', '-1')
         await this._saveCategory(categories)
@@ -51,10 +52,10 @@ class CategoryScraper extends Scraper {
         for (const parentCategory of parentCategories) {
             const { _id, url } = parentCategory
             if (!this._isCatUrl(url)) continue
-            await this.page.goto(url)
+            await this.goto(this.page, url)
             while (this._isRecaptchaPage()) {
                 await this.init()
-                await this.page.goto(url)
+                await this.goto(this.page, url)
             }
 
             if (!await this._isCatPage()) continue
