@@ -106,7 +106,7 @@ class ProductScraper extends Scraper {
 
     gotoList = async (pageUrl) => {
         await this.page2.goto(pageUrl)
-        while (this._isRecaptchaPage(page)) {
+        while (this._isRecaptchaPage(this.page2)) {
             this.init()
             await this.page2.goto(pageUrl)
         }
@@ -121,7 +121,7 @@ class ProductScraper extends Scraper {
     parsePage = async (url) => {
         console.log('start url', url)
         await this.page2.goto(url)
-        while (this._isRecaptchaPage(page)) {
+        while (this._isRecaptchaPage(this.page2)) {
             this.init()
             await this.page2.goto(url)
         }
