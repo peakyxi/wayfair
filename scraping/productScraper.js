@@ -60,6 +60,7 @@ class ProductScraper extends Scraper {
             const pageUrls = await this.parsePage(url)
             for (const pageUrl of pageUrls) {
                 const detailUrls = await this.parseList(pageUrl)
+                console.log('detail count', detailUrls.length)
                 for (const detailUrl of detailUrls) {
                     const detail = await this.parseDetail(detailUrl)
                     await this._saveProduct(detail)
@@ -136,7 +137,6 @@ class ProductScraper extends Scraper {
     }
     gotoDetail = async (url) => {
         console.log('detail url ', url)
-        if (this.page.url() === url) return
         await this.page.goto(url)
         while (this._isRecaptchaPage(this.page)) {
             this.init()
