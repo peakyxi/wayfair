@@ -168,6 +168,7 @@ class ProductScraper extends Scraper {
 
         const features = await this.page.evaluate(() => {
             const titleEle = [...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features')
+            if (!titleEle) return null
             return [...titleEle.nextElementSibling.querySelectorAll('dl> dt')]
                 .reduce((ret, item) => {
                     const key = item.innerText
@@ -178,6 +179,7 @@ class ProductScraper extends Scraper {
         })
         const assembly = await this.page.evaluate(() => {
             const titleEle = [...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Assembly')
+            if (!titleEle) return null
             return [...titleEle.nextElementSibling.querySelectorAll('dl> dt')]
                 .reduce((ret, item) => {
                     const key = item.innerText
@@ -189,6 +191,7 @@ class ProductScraper extends Scraper {
 
         const warranty = await this.page.evaluate(() => {
             const titleEle = [...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Warranty')
+            if (!titleEle) return null
             return [...titleEle.nextElementSibling.querySelectorAll('dl> dt')]
                 .reduce((ret, item) => {
                     const key = item.innerText
