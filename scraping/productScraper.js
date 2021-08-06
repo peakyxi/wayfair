@@ -132,9 +132,9 @@ class ProductScraper extends Scraper {
         console.log('detail url ', url)
         await this.goto(this.page, url)
         await this.page.bringToFront()
-        await this.page.waitForFunction(() => !![...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More'))
+        await this.waitForFunction(this.page, () => !![...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More'))
         await this.page.evaluate(() => [...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More').click())
-        await this.page.waitForFunction(() => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
+        await this.waitForFunction(this.page, () => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
     }
 
     _parseDetail = async () => {
@@ -201,7 +201,7 @@ class ProductScraper extends Scraper {
             }
         } catch (err) {
             console.log(err)
-            if (!err.message.match(/google recaptcha error|Navigation timeout of|waiting for function failed/))
+            if (!err.message.match(/google recaptcha error|Navigation timeout of/))
                 return await this.browser.close()
             if (!!err.message.match(/google recaptcha error/))
                 await this.init()
@@ -209,6 +209,14 @@ class ProductScraper extends Scraper {
 
         }
 
+    }
+    waitForFunction = async (page, fun) => {
+        try {
+            await page.waitForFunction(fun)
+        } catch (err) {
+            await page.reload()
+            await this.waitForFunction(page, fun)
+        }
     }
     _isRecaptchaPage = (page) => {
         return !!page.url().match(/captcha/)
