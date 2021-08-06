@@ -210,7 +210,7 @@ class ProductScraper extends Scraper {
 
         } catch (err) {
             console.log(err)
-            if (!!err.message.match(/Navigation timeout of/))
+            if (!!err.message.match(/Navigation timeout of|ERR_CONNECTION_RESET/))
                 return await this.goto(page, url)
             return await this.browser.close()
 
