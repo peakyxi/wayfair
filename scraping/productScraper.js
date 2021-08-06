@@ -125,7 +125,7 @@ class ProductScraper extends Scraper {
             this.init()
             await this.page2.goto(url)
         }
-        const count = await this.page2.evaluate(() => [...document.querySelectorAll('.pl-Pagination > *')].filter(ele => Number.parseInt(ele.innerText)).pop())
+        const count = await this.page2.evaluate(() => [...document.querySelectorAll('.pl-Pagination > *')].map(ele => parseInt(ele.innerText)).filter(num => !!num).pop())
         let urls = [...Array(count)].map((_, i) => `${this.url}?curpage=${i + 1}`)
         // urls = urls.slice(this.pageIndex)
         return urls
@@ -133,6 +133,7 @@ class ProductScraper extends Scraper {
 
     }
     gotoDetail = async (url) => {
+        console.log('detail url ', url)
         if (this.page.url() === url) return
         await this.page.goto(url)
         while (this._isRecaptchaPage(page)) {
