@@ -201,7 +201,7 @@ class ProductScraper extends Scraper {
             }
         } catch (err) {
             console.log(err)
-            if (!err.message.match(/google recaptcha error|Navigation timeout of/))
+            if (!err.message.match(/google recaptcha error|Navigation timeout of|waiting for function failed/))
                 return await this.browser.close()
             if (!!err.message.match(/google recaptcha error/))
                 await this.init()
