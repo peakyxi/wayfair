@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const schema = new mongoose.Schema({
 
-}, { strick: false })
+}, { strict: false })
 
 const Product = mongoose.model('product', schema)
 

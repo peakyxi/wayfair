@@ -142,10 +142,13 @@ class ProductScraper extends Scraper {
             this.init()
             await this.page.goto(url)
         }
+        await this.page.bringToFront()
+        await this.page.evaluate(() => [...document.querySelectorAll('button')].find(ele => ele.innerText === 'See More').click())
         await this.page.waitForFunction(() => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
     }
 
     _parseDetail = async () => {
+
         const item = await this.page.evaluate(() => document.querySelector('.ProductDetailInfoBlock-header >h1').innerText)
         const description = await this.page.evaluate(() => document.querySelector('.OverviewPreviewExpansion').innerText.replace('See More', ''))
         const image_url = await this.page.evaluate(() => 'image url')
