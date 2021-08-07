@@ -26,11 +26,11 @@ class CategoryScraper extends Scraper {
 
     _run = async () => {
 
-        // await this.scrapeMainCategory()
-        // await this.scrapeGeneralCategory('mainCategory', 'subCategory')
-        // await this.scrapeGeneralCategory('subCategory', 'itemCategory')
-        // await this.scrapeGeneralCategory('itemCategory', 'subItemCategory')
-        // await this.scrapeGeneralCategory('subItemCategory', 'subSubItemCategory')
+        await this.scrapeMainCategory()
+        await this.scrapeGeneralCategory('mainCategory', 'subCategory')
+        await this.scrapeGeneralCategory('subCategory', 'itemCategory')
+        await this.scrapeGeneralCategory('itemCategory', 'subItemCategory')
+        await this.scrapeGeneralCategory('subItemCategory', 'subSubItemCategory')
         await this.scrapeGeneralCategory('subSubItemCategory', 'subSubSubItemCategory')
         await this.browser.close()
     }
