@@ -133,7 +133,7 @@ class ProductScraper extends Scraper {
     }
     parseDetail = async (detailUrl) => {
         await this.gotoDetail(detailUrl)
-        return await this._parseDetail()
+        return await this._parseDetail(detailUrl)
     }
     gotoDetail = async (url) => {
         console.log('detail url ', url)
@@ -148,8 +148,8 @@ class ProductScraper extends Scraper {
         // await this.waitForFunction(this.page, url, () => !![...document.querySelectorAll('.Specifications h4')].find(ele => ele.innerText === 'Features'))
     }
 
-    _parseDetail = async () => {
-
+    _parseDetail = async (detailUrl) => {
+        await this.waitForFunction(this.page, detailUrl, () => !!document.querySelector('.ProductDetailInfoBlock-header >h1'))
         const item = await this.page.evaluate(() => document.querySelector('.ProductDetailInfoBlock-header >h1').innerText)
         const description = await this.page.evaluate(() => document.querySelector('.OverviewPreviewExpansion').innerText.replace('See More', ''))
         const image_url = await this.page.evaluate(() => 'image url')
