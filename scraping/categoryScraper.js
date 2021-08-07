@@ -52,10 +52,12 @@ class CategoryScraper extends Scraper {
         for (const parentCategory of parentCategories) {
             const { _id, url } = parentCategory
             if (!this._isCatUrl(url)) continue
-            await this.goto(this.page, url)
-            while (this._isRecaptchaPage()) {
+
+            let handled = await this.goto(this.page, url)
+
+            while (this._isRecaptchaPage() || handled == 'unhandle') {
                 await this.init()
-                await this.goto(this.page, url)
+                handled = await this.goto(this.page, url)
             }
 
             if (!await this._isCatPage()) continue

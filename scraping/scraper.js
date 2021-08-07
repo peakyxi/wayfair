@@ -47,12 +47,12 @@ class Scraper {
             console.log(err)
             if (!!err.message.match(/Navigation timeout of|ERR_CONNECTION_RESET/))
                 return await this.goto(page, url)
-            return await this.browser.close()
-
-
+            return 'unhandle'
         }
 
     }
+
+
     waitForFunction = async (page, url, fun) => {
         try {
             await page.waitForFunction(fun)
