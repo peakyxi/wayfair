@@ -45,7 +45,7 @@ class Scraper {
 
         } catch (err) {
             console.log(err)
-            if (!!err.message.match(/Navigation timeout of|ERR_CONNECTION_RESET/))
+            if (!!err.message.match(/Navigation timeout of/))
                 return await this.goto(page, url)
             return 'unhandle'
         }
