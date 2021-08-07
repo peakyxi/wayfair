@@ -55,7 +55,7 @@ class CategoryScraper extends Scraper {
 
             let handled = await this.goto(this.page, url)
 
-            while (this._isRecaptchaPage() || handled == 'unhandle') {
+            while (handled == 'unhandle' || this._isRecaptchaPage()) {
                 await this.init()
                 handled = await this.goto(this.page, url)
             }
