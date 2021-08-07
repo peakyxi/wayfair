@@ -108,7 +108,7 @@ class ProductScraper extends Scraper {
         let handled = await this.goto(this.page2, pageUrl)
         while (handled === "unhandle" || this._isRecaptchaPage(this.page2)) {
             await this.init()
-            handled = await this.goto(this.page, pageUrl)
+            handled = await this.goto(this.page2, pageUrl)
         }
     }
 
