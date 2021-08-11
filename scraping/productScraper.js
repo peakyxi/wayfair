@@ -61,7 +61,8 @@ class ProductScraper extends Scraper {
     }
 
     _run = async () => {
-        for (const { url, cateName, _id: cateId } of this.cates) {
+        for (const { url, name: cateName, _id: cateId } of this.cates) {
+            console.log(cateName, cateId)
             const { pageUrls, resultsCount } = await this.parsePage(url)
             for (const pageUrl of pageUrls) {
                 const detailUrls = await this.parseList(pageUrl)
