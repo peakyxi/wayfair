@@ -104,7 +104,7 @@ class ProductScraper extends Scraper {
             cates.push(doc)
         }
         for (const child of childDocs) {
-            await this.findUrlsInCategory(child, cates)
+            await this.findLastCatesFromCategory(child, cates)
         }
         return cates.slice(this.urlIndex)
     }

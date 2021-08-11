@@ -6,12 +6,12 @@ import config from 'config'
 const [proxyIp, proxyPort] = config.get('proxy').split(":")
 
 const chromePath = config.get('chrome_path')
-const headless = config.get('headless')
+const headless = config.get('headless') === 'true'
 const userAgent = config.get('userAgent')
 class Puppeteer {
     constructor() {
-        if (proxyIp)
-            this.setProxy()
+        // if (proxyIp)
+        //     this.setProxy()
     }
 
     args = [
