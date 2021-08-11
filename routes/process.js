@@ -3,6 +3,7 @@ import express from 'express'
 import Process from '../models/process.js'
 import Scrapers from '../scraping/scrapersContainer.js'
 import Product from '../models/product.js'
+import Category from '../models/category.js'
 
 
 
@@ -60,7 +61,7 @@ const findLastCatesFromCategory = async (cid, cids = []) => {
         res.send({ done: true })
 
     })
-    router.post('/download', async () => {
+    router.post('/download', async (req, res) => {
 
         const { cid } = req.body
 
