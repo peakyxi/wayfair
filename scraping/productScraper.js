@@ -151,10 +151,10 @@ class ProductScraper extends Scraper {
             handled = await this.goto(this.page2, url)
         }
         const count = await this.page2.evaluate(() => [...document.querySelectorAll('.pl-Pagination > *')].map(ele => parseInt(ele.innerText)).filter(num => !!num).pop())
-        let urls = [...Array(count)].map((_, i) => `${url}?curpage=${i + 1}`)
+        let pageUrls = [...Array(count)].map((_, i) => `${url}?curpage=${i + 1}`)
         const resultsCount = await this.page2.$eval('.ResultsCount', (ele) => ele.innerText.replace(',', '').replace(/.*?(\d+) Results/, '$1'))
-        urls = urls.slice(this.pageIndex)
-        return { urls, resultsCount }
+        pageUrls = urls.slice(this.pageIndex)
+        return { pageUrls, resultsCount }
 
 
     }
