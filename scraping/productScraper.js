@@ -138,7 +138,7 @@ class ProductScraper extends Scraper {
         })
         const list = urls.map(urlItem => {
             const objUrl = new URL(urlItem)
-            const url = objUrl.host + objUrl.pathname
+            const url = objUrl.origin + objUrl.pathname
             return url
         })
         return list.slice(this.itemIndex)
