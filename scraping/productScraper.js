@@ -93,7 +93,7 @@ class ProductScraper extends Scraper {
     }
 
     _saveProduct = async (detail, cateName, cateId) => {
-        Product.findOneAndUpdate({ sku: detail.sku }, { ...detail, cateIds: { $push: cateId }, cateNames: { $push: cateName } }, { upsert: true, new: true, useFindAndModify: false })
+        Product.findOneAndUpdate({ sku: detail.sku }, { ...detail, $push: { cateIds: cateId }, $push: { cateNames: cateName } }, { upsert: true, new: true, useFindAndModify: false })
             .then(doc => console.log(doc))
             .catch(err => console.log('SaveError:', err.message))
     }
