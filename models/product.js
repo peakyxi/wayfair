@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const schema = new mongoose.Schema({
 
-    cateIds: { type: [mongoose.Schema.Types.ObjectId], required: true },
+    cateIds: { type: [String], required: true },
     cateNames: { type: [String], required: true }
 }, { strict: false })
 

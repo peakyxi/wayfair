@@ -61,7 +61,7 @@ class ProductScraper extends Scraper {
     }
 
     _run = async () => {
-        for (const { url, name: cateName, _id: cateId } of this.cates) {
+        for (const { url, name: cateName, id: cateId } of this.cates) {
 
             const { pageUrls, resultsCount } = await this.parsePage(url)
             for (const pageUrl of pageUrls) {
@@ -95,7 +95,7 @@ class ProductScraper extends Scraper {
 
     _saveProduct = async (detail, cateName, cateId) => {
         console.log(cateName, cateId)
-        console.log(typeof (cateId))
+
         Product.findOneAndUpdate({ sku: detail.sku }, { ...detail, $push: { cateIds: cateId }, $push: { cateNames: cateName } }, { upsert: true, new: true, useFindAndModify: false })
             .then(doc => console.log(doc))
             .catch(err => console.log('SaveError:', err.message))
