@@ -125,7 +125,7 @@ class ProductScraper extends Scraper {
     }
 
     _parseList = async () => {
-        const type1Grid = document.querySelector('#sbprodgrid').innerText
+
         let urls = await this.page2.evaluate(() => {
             const type1Grid = document.querySelector('#sbprodgrid').innerText
             if (type1Grid) {
