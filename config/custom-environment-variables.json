@@ -1,0 +1,5 @@
+{
+    "chrome_path": "CHROME_PATH",
+    "headless": "CHROME_HEADLESS",
+    "userAgent": "BROWSER_USER_AGENT"
+}
