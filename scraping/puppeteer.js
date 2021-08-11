@@ -10,8 +10,8 @@ const headless = config.get('headless') === 'true'
 const userAgent = config.get('userAgent')
 class Puppeteer {
     constructor() {
-        if (proxyIp)
-            this.setProxy()
+
+        this.setProxy()
     }
 
     args = [
