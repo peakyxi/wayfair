@@ -16,7 +16,7 @@ const findLastCatesFromCategory = async (cid, cids = []) => {
         cids.push(cid)
     }
     for (const child of childDocs) {
-        await this.findUrlsInCategory(child._id, cids)
+        await this.findLastCatesFromCategory(child._id, cids)
     }
     return cids
 }
