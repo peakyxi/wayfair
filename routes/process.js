@@ -9,7 +9,7 @@ import Product from '../models/product.js'
 
 const router = express.Router();
 
-findLastCatesFromCategory = async (cid, cids = []) => {
+const findLastCatesFromCategory = async (cid, cids = []) => {
     const childDocs = await Category.find({ parent: cid }).lean().exec()
     if (childDocs.length === 0) {
         cids.push(cid)
