@@ -20,12 +20,11 @@ class ProductScraper extends Scraper {
     }
     setup = async () => {
 
-
-        await this._updateProcess({ statusCode: 1, status: 'Runing', error: null }, true)
         const { urlIndex, pageIndex, itemIndex } = this.process.position
         this.urlIndex = urlIndex || 0
         this.pageIndex = pageIndex || 0
         this.itemIndex = itemIndex || 0
+        await this._updateProcess({ statusCode: 1, status: 'Runing', error: null }, true)
         const doc = await Category.findById(this.id).lean().exec()
         this.cates = await this.findLastCatesFromCategory(doc)
 
@@ -126,7 +125,8 @@ class ProductScraper extends Scraper {
             await this.init()
             handled = await this.goto(this.page2, pageUrl)
         }
-        await this.page2.click('.DailySalesSignup-label')
+        await this.page2.bringToFront()
+        await this.page2.click('span.pl-Pagination-ellipsis')
     }
 
     _parseList = async () => {
