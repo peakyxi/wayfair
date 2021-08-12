@@ -94,7 +94,9 @@ class ProductScraper extends Scraper {
     }
 
     _saveProduct = async (detail, cateName, cateId) => {
+        console.log(cateName, cateId.toString())
         cateId = cateId.toString()
+        console.log(typeof cateId)
 
         Product.findOneAndUpdate({ sku: detail.sku }, { ...detail, $addToSet: { cateIds: cateId }, $addToSet: { cateNames: cateName } }, { upsert: true, new: true, useFindAndModify: false })
             .then(doc => console.log(doc))
