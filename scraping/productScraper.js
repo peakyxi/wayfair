@@ -10,11 +10,7 @@ class ProductScraper extends Scraper {
             super(id)
             this.cates = []
             this.process = null
-            this.urlIndex
-            this.pageIndex
-            this.itemIndex
-
-
+            this.position = {}
             return this
         })()
     }
@@ -22,7 +18,7 @@ class ProductScraper extends Scraper {
 
 
         await this._updateProcess({ statusCode: 1, status: 'Runing', error: null }, true)
-        const { urlIndex, pageIndex, itemIndex } = this.process.position
+        const { urlIndex, pageIndex, itemIndex } = this.position
         this.urlIndex = urlIndex || 0
         this.pageIndex = pageIndex || 0
         this.itemIndex = itemIndex || 0
@@ -81,9 +77,29 @@ class ProductScraper extends Scraper {
         }
     }
 
+    set urlIndex(value) {
+        this.position['urlIndex'] = value
+        this._updateProcess({ position })
+    }
+    get urlIndex() {
+        return this.position['urlIndex']
+    }
+    set pageIndex(value) {
+        this.position['pageIndex'] = value
+        this._updateProcess({ position })
+    }
+    get pageIndex() {
+        return this.position['pageIndex']
+    }
+    set itemIndex(value) {
+        this.position['itemIndex'] = value
+        this._updateProcess({ position })
+    }
+    get itemIndex() {
+        return this.position['itemIndex']
+    }
+
     _updateProcess = async (process, upsert = false) => {
-        const position = { urlIndex: this.urlIndex, pageIndex: this.pageIndex, itemIndex: this.itemIndex }
-        process['position'] = position
         return Process.findOneAndUpdate({ belong: this.id }, process, { upsert, new: true, useFindAndModify: false })
             .populate('belong')
             .lean()
@@ -128,6 +144,7 @@ class ProductScraper extends Scraper {
         }
         await this.page2.bringToFront()
         await this.page2.click('span.pl-Pagination-ellipsis')
+        await this.waitForFunction(this.page2, pageUrl, () => ![...document.querySelectorAll('span')].find(ele => ele.innerText === 'Loading...'))
     }
 
     _parseList = async () => {

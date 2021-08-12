@@ -53,14 +53,20 @@ class Scraper {
     }
 
 
-    waitForFunction = async (page, url, fun) => {
-        try {
-            await page.waitForFunction(fun)
-        } catch (err) {
-            await this.goto(page, url)
-            await this.waitForFunction(page, url, fun)
+    waitForFunction = (() => {
+        let counter = 0
+        return async (page, url, fun) => {
+            try {
+                await page.waitForFunction(fun)
+            } catch (err) {
+                counter++
+                if (coutner >= 5) return
+                await this.goto(page, url)
+                await this.waitForFunction(page, url, fun)
+            }
         }
-    }
+
+    })()
 
 
 
