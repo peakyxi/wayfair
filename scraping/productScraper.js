@@ -126,6 +126,7 @@ class ProductScraper extends Scraper {
             await this.init()
             handled = await this.goto(this.page2, pageUrl)
         }
+        await this.page2.click('.DailySalesSignup-label')
     }
 
     _parseList = async () => {
@@ -136,7 +137,8 @@ class ProductScraper extends Scraper {
                 return [...document.querySelector('#sbprodgrid > div').children].slice(0, -3)
                     .map(ele => ele.querySelector('a').href)
             } else {
-                return [...document.querySelector('h1.pl-Heading--pageTitle').closest('#bd').querySelector('.pl-Grid').children].slice(0, -3).length
+                return [...document.querySelector('h1.pl-Heading--pageTitle').closest('#bd').querySelector('.pl-Grid').children].slice(0, -3)
+                    .map(ele => ele.querySelector('a').href)
             }
 
         })
@@ -190,7 +192,7 @@ class ProductScraper extends Scraper {
         const WeightsDimensions = await this.page.evaluate(() => {
             const prefix = 'Weights & Dimensions'
             return [...document.querySelectorAll('.ProductWeightsDimensions dl.pl-DescriptionList > dt')].reduce((ret, dt) => {
-                const key = `${prefix} dt.innerText`
+                const key = `${prefix} ${dt.innerText}`
                 const value = dt.nextElementSibling.innerText
                 ret[key] = value
                 return ret
