@@ -60,7 +60,7 @@ class Scraper {
                 await page.waitForFunction(fun)
             } catch (err) {
                 counter++
-                if (coutner >= 5) return
+                if (counter >= 5) return
                 await this.goto(page, url)
                 await this.waitForFunction(page, url, fun)
             }
