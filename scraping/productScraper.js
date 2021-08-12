@@ -79,21 +79,21 @@ class ProductScraper extends Scraper {
 
     set urlIndex(value) {
         this.position['urlIndex'] = value
-        this._updateProcess({ position })
+        this._updateProcess({ position: this.position })
     }
     get urlIndex() {
         return this.position['urlIndex']
     }
     set pageIndex(value) {
         this.position['pageIndex'] = value
-        this._updateProcess({ position })
+        this._updateProcess({ position: this.position })
     }
     get pageIndex() {
         return this.position['pageIndex']
     }
     set itemIndex(value) {
         this.position['itemIndex'] = value
-        this._updateProcess({ position })
+        this._updateProcess({ position: this.position })
     }
     get itemIndex() {
         return this.position['itemIndex']
