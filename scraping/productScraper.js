@@ -72,7 +72,7 @@ class ProductScraper extends Scraper {
                     await this._saveProduct(detail, cateName, cateId)
                     this.itemIndex++
                 }
-                this.itemIndx = 0
+                this.itemIndex = 0
                 this.pageIndex++
             }
             this.pageIndex = 0
