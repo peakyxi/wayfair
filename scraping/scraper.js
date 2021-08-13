@@ -58,9 +58,13 @@ class Scraper {
         return async (page, url, fun) => {
             try {
                 await page.waitForFunction(fun)
+                counter = 0
             } catch (err) {
                 counter++
-                if (counter >= 5) return
+                if (counter >= 5) {
+                    counter = 0
+                    return
+                }
                 await this.goto(page, url)
                 await this.waitForFunction(page, url, fun)
             }
