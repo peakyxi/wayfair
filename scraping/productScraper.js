@@ -48,11 +48,7 @@ class ProductScraper extends Scraper {
             return await this._run()
         } catch (err) {
             console.log(err)
-            this._updateProcess({
-                statusCode: 0, status: 'Stopped', error: err.message,
-                position: { urlIndex: this.urlIndex, pageIndex: this.pageIndex, itemIndex: this.itemIndex }
-            })
-            await this.browser.close()
+            return await this.run()
         }
     }
 
