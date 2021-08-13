@@ -57,7 +57,7 @@ class Scraper {
         let counter = 0
         return async (page, url, fun) => {
             try {
-                await page.waitForFunction(fun)
+                await page.waitForFunction(fun, { polling: 1000 })
                 counter = 0
             } catch (err) {
                 counter++

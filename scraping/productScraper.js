@@ -140,7 +140,22 @@ class ProductScraper extends Scraper {
         }
         await this.page2.bringToFront()
         await this.page2.click('span.pl-Pagination-ellipsis')
-        await this.waitForFunction(this.page2, pageUrl, () => ![...document.querySelectorAll('span')].find(ele => ele.innerText === 'Loading...'))
+        await this.waitForFunction(this.page2, pageUrl, () => {
+            const notLast = [...document.querySelector('nav.pl-Pagination').children].pop().tagName === 'A'
+            if (notLast) {
+                const type1Grid = document.querySelector('#sbprodgrid').innerText
+                if (type1Grid) {
+                    return [...document.querySelector('#sbprodgrid > div').children]
+                        .slice(0, -3).length === 48
+
+                } else {
+                    return [...document.querySelector('h1.pl-Heading--pageTitle').closest('#bd').querySelector('.pl-Grid').children]
+                        .slice(0, -3).length === 48
+                }
+            }
+            return true
+        })
+
     }
 
     _parseList = async () => {
