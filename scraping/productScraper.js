@@ -210,8 +210,7 @@ class ProductScraper extends Scraper {
 
     _parseDetail = async (detailUrl) => {
 
-        await this.waitForFunction(this.page, detailUrl, () => !!document.querySelector('.ProductDetailInfoBlock-header >h1'))
-        await this.waitForFunction(this.page, detailUrl, () => !!document.querySelector('.ProductDetailImageCarouselVariantB-carousel > li img'))
+        await this.waitForFunction(this.page, detailUrl, () => document.querySelectorAll('.PdpLayoutResponsive-top .pl-Placeholder').length === 7)
         const item = await this.page.evaluate(() => document.querySelector('.ProductDetailInfoBlock-header >h1').innerText)
         const sku = await this.page.evaluate(() => document.querySelector('nav.Breadcrumbs').innerText.replace(/.+\/SKU:([^\/]+).*/, '$1').trim())
         const description = await this.page.evaluate(() => document.querySelector('.OverviewPreviewExpansion').innerText.replace('See More', ''))
