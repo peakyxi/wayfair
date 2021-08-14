@@ -7,7 +7,7 @@ const [proxyIp, proxyPort] = config.get('proxy').split(":")
 class ProductScraper extends Scraper {
     constructor(id) {
         return (async () => {
-            super(id)
+            await super(id)
             this.cates = []
             this.process = null
             this.position = {}
@@ -15,7 +15,6 @@ class ProductScraper extends Scraper {
         })()
     }
     setup = async () => {
-
 
         await this._updateProcess({ statusCode: 1, status: 'Runing', error: null }, true)
         this.position = this.process.position

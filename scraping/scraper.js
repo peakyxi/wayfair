@@ -1,10 +1,8 @@
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 puppeteer.use(StealthPlugin())
-import pluginProxy from 'puppeteer-extra-plugin-proxy'
 import config from 'config'
-const [proxyIp, proxyPort] = config.get('proxy').split(":")
-puppeteer.use(pluginProxy({ address: proxyIp, port: proxyPort, credentials: { username: '', password: '' } }))
+const proxyServer = config.get('proxy')
 const chromePath = config.get('chrome_path')
 const headless = config.get('headless') === 'true'
 const userAgent = config.get('userAgent')
@@ -16,14 +14,19 @@ const args = [
     "--window-position=0,0",
     "--ignore-certifcate-errors",
     "--ignore-certifcate-errors-spki-list",
-    `--user-agent="${userAgent}"`
+    `--user-agent="${userAgent}"`,
+    `--proxy-server=${proxyServer}`
 ]
 
 class Scraper {
     constructor(id) {
-        this.id = id
-        this.browser = null
-        this.pages = []
+        return (async () => {
+            this.id = id
+            this.browser = null
+            this.pages = []
+            await this.init()
+            return this
+        })()
     }
     init = async () => {
         if (this.browser) {
