@@ -33,7 +33,6 @@ class ProductScraper extends Scraper {
     delete = async () => {
         if (this.browser)
             await this.browser.close()
-
         return await Process.findOneAndRemove({ belong: this.id }).exec()
     }
 

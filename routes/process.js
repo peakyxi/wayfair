@@ -67,7 +67,7 @@ const findLastCatesFromCategory = async (cid, cids = []) => {
 
         const cids = await findLastCatesFromCategory(cid)
         Product.find({ cateIds: { $in: cids } })
-            .select('-url')
+            .select('-url -cateIds -cateNames -sku -_id')
             .lean()
             .then(products => res.send(products))
 

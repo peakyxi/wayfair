@@ -1,44 +1,41 @@
-import Puppeteer from './puppeteer.js'
+import puppeteer from 'puppeteer-extra'
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+puppeteer.use(StealthPlugin())
+import pluginProxy from 'puppeteer-extra-plugin-proxy'
+import config from 'config'
+const [proxyIp, proxyPort] = config.get('proxy').split(":")
+puppeteer.use(pluginProxy({ address: proxyIp, port: proxyPort, credentials: { username: '', password: '' } }))
+const chromePath = config.get('chrome_path')
+const headless = config.get('headless') === 'true'
+const userAgent = config.get('userAgent')
 
-
-import fs from 'fs'
+args = [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-infobars",
+    "--window-position=0,0",
+    "--ignore-certifcate-errors",
+    "--ignore-certifcate-errors-spki-list",
+    `--user-agent="${userAgent}"`
+]
 
 class Scraper {
     constructor(id) {
-
         this.id = id
-        this.puppeteer = null
         this.browser = null
-        this.context = null
         this.pages = []
-        // this.tempDir = 'temp'
-        // this.userDataDir = `${this.tempDir}/temp_${id}`
-
     }
     init = async () => {
         if (this.browser) {
             await this.browser.close()
-            this.puppeteer = null
         }
-        const puppeteer = new Puppeteer()
-        this.puppeteer = puppeteer
-
-        const browser = await puppeteer.launch()
-        const context = await browser.createIncognitoBrowserContext();
-        await context.newPage()
-        await context.newPage()
+        const browser = await puppeteer.launch({ ignoreHTTPSErrors: true, executablePath: chromePath, headless: headless, defaultViewport: null, args })
         this.browser = browser
-        this.context = context
-        this.pages = await context.pages()
+        this.pages = await browser.pages()
         this.page = this.pages[0]
         this.page2 = this.pages[1]
-
-
     }
-    createDirs = () => {
-        if (!fs.existsSync(this.tempDir))
-            fs.mkdirSync(this.tempDir)
-    }
+
     goto = async (page, url) => {
         try {
             await page.goto(url, { waitUntil: "networkidle2" })
@@ -51,8 +48,6 @@ class Scraper {
         }
 
     }
-
-
     waitForFunction = (() => {
         let counter = 0
         return async (page, url, fun) => {
