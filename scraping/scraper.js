@@ -20,13 +20,11 @@ const args = [
 
 class Scraper {
     constructor(id) {
-        return (async () => {
-            this.id = id
-            this.browser = null
-            this.pages = []
-            await this.init()
-            return this
-        })()
+
+        this.id = id
+        this.browser = null
+        this.pages = []
+
     }
     init = async () => {
         if (this.browser) {
@@ -35,6 +33,7 @@ class Scraper {
         const browser = await puppeteer.launch({ ignoreHTTPSErrors: true, executablePath: chromePath, headless: headless, defaultViewport: null, args })
         this.browser = browser
         this.pages = await browser.pages()
+        await browser.newPage()
         this.page = this.pages[0]
         this.page2 = this.pages[1]
     }
