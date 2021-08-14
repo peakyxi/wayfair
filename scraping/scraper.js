@@ -35,7 +35,9 @@ class Scraper {
         await browser.newPage()
         this.pages = await browser.pages()
         this.page = this.pages[0]
+        await this.page.authenticate('', '');
         this.page2 = this.pages[1]
+        await this.page2.authenticate('', '');
     }
 
     goto = async (page, url) => {
