@@ -18,6 +18,9 @@ class ProductScraper extends Scraper {
 
         await this._updateProcess({ statusCode: 1, status: 'Runing', error: null }, true)
         this.position = this.process.position
+        if (!this.position) {
+            this.position = { urlIndex: 0, pageIndex: 0, itemIndex: 0 }
+        }
         const doc = await Category.findById(this.id).lean().exec()
         this.cates = await this.findLastCatesFromCategory(doc)
 
