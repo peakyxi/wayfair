@@ -9,7 +9,7 @@ const chromePath = config.get('chrome_path')
 const headless = config.get('headless') === 'true'
 const userAgent = config.get('userAgent')
 
-args = [
+const args = [
     "--no-sandbox",
     "--disable-setuid-sandbox",
     "--disable-infobars",
