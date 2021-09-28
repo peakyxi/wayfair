@@ -45,7 +45,7 @@ router.post('/scraping', async (req, res) => {
     scraper = await new CategoryScraper("1")
     res.send({ status: "running" })
     scraper.run()
-        .then(() => scraper = null)
+        .then(() => process.exit())
 
 })
 

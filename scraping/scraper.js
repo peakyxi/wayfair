@@ -4,7 +4,7 @@ puppeteer.use(StealthPlugin())
 import config from 'config'
 const proxyServer = config.get('proxy')
 const chromePath = config.get('chrome_path')
-const headless = config.get('headless') === 'true'
+const headless = config.get('headless') === "true"
 const userAgent = config.get('userAgent')
 
 const args = [
@@ -34,10 +34,22 @@ class Scraper {
         this.browser = browser
         await browser.newPage()
         this.pages = await browser.pages()
+        for (const page of this.pages) {
+            await page.authenticate('', '');
+            await page.setRequestInterception(true)
+            page.on('request', req => {
+                const resourceType = req.resourceType()
+                if (["styleshee", "image", "media", "font"].includes(resourceType)) {
+                    req.abort()
+                } else {
+                    req.continue()
+                }
+            })
+        }
         this.page = this.pages[0]
-        await this.page.authenticate('', '');
+
         this.page2 = this.pages[1]
-        await this.page2.authenticate('', '');
+
     }
 
     goto = async (page, url) => {

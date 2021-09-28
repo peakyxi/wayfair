@@ -52,14 +52,15 @@ class ProductScraper extends Scraper {
 
     _run = async () => {
         for (const { url, name: cateName, _id: cateId } of this.cates) {
-
             const { pageUrls, resultsCount } = await this.parsePage(url)
             for (const pageUrl of pageUrls) {
                 const detailUrls = await this.parseList(pageUrl)
                 console.log('detail count', detailUrls.length)
                 for (const detailUrl of detailUrls) {
                     const detail = await this.parseDetail(detailUrl)
-                    await this._saveProduct(detail, cateName, cateId)
+                    if (detail) {
+                        await this._saveProduct(detail, cateName, cateId)
+                    }
                     this.itemIndex++
                 }
                 this.itemIndex = 0
@@ -109,7 +110,7 @@ class ProductScraper extends Scraper {
         cateId = cateId.toString()
 
         Product.findOneAndUpdate({ sku: detail.sku }, { ...detail, $addToSet: { cateIds: cateId, cateNames: cateName } }, { upsert: true, new: true, useFindAndModify: false })
-            .then(doc => console.log(doc))
+            .then(doc => console.log(doc._id))
             .catch(err => console.log('SaveError:', err.message))
     }
 
@@ -142,15 +143,8 @@ class ProductScraper extends Scraper {
         await this.waitForFunction(this.page2, pageUrl, () => {
             const notLast = [...document.querySelector('nav.pl-Pagination').children].pop().tagName === 'A'
             if (notLast) {
-                const type1Grid = document.querySelector('#sbprodgrid').innerText
-                if (type1Grid) {
-                    return [...document.querySelector('#sbprodgrid > div').children]
-                        .slice(0, -3).length === 48
-
-                } else {
-                    return [...document.querySelector('h1.pl-Heading--pageTitle').closest('#bd').querySelector('.pl-Grid').children]
-                        .slice(0, -3).length === 48
-                }
+                return [...document.querySelector('h1.pl-Heading--pageTitle').closest('#bd').querySelector('.pl-Grid').children]
+                    .filter(item => item.classList.contains('pl-Box--pb-2')).length === 48
             }
             return true
         })
@@ -160,15 +154,9 @@ class ProductScraper extends Scraper {
     _parseList = async () => {
 
         let urls = await this.page2.evaluate(() => {
-            const type1Grid = document.querySelector('#sbprodgrid').innerText
-            if (type1Grid) {
-                return [...document.querySelector('#sbprodgrid > div').children].slice(0, -3)
-                    .map(ele => ele.querySelector('a').href)
-            } else {
-                return [...document.querySelector('h1.pl-Heading--pageTitle').closest('#bd').querySelector('.pl-Grid').children].slice(0, -3)
-                    .map(ele => ele.querySelector('a').href)
-            }
-
+            return [...document.querySelector('h1.pl-Heading--pageTitle').closest('#bd').querySelector('.pl-Grid').children]
+                .filter(item => item.classList.contains('pl-Box--pb-2'))
+                .map(ele => ele.querySelector('a').href)
         })
         const list = urls.map(urlItem => {
             const objUrl = new URL(urlItem)
@@ -210,8 +198,9 @@ class ProductScraper extends Scraper {
     }
 
     _parseDetail = async (detailUrl) => {
-
-        await this.waitForFunction(this.page, detailUrl, () => document.querySelectorAll('.PdpLayoutResponsive-top .pl-Placeholder').length === 7)
+        await this.waitForFunction(this.page, detailUrl, () => document.querySelectorAll('.PdpLayoutResponsive-top .pl-Placeholder').length >= 7)
+        const isCategoryPage = await this.page.$('nav.pl-Pagination')
+        if (isCategoryPage) return null
         const item = await this.page.evaluate(() => document.querySelector('.ProductDetailInfoBlock-header >h1').innerText)
         const sku = await this.page.evaluate(() => document.querySelector('nav.Breadcrumbs').innerText.replace(/.+\/SKU:([^\/]+).*/, '$1').trim())
         const description = await this.page.evaluate(() => document.querySelector('.OverviewPreviewExpansion').innerText.replace('See More', ''))
