@@ -35,7 +35,7 @@ class Scraper {
         await browser.newPage()
         this.pages = await browser.pages()
         for (const page of this.pages) {
-            await page.authenticate('', '');
+            await page.authenticate({ username: '', password: '' });
             await page.setRequestInterception(true)
             page.on('request', req => {
                 const resourceType = req.resourceType()
