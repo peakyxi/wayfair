@@ -9,34 +9,19 @@ class ProductScraper extends Scraper {
         return (async () => {
             super(id)
             this.cates = []
-            this.process = null
             this.position = {}
             return this
         })()
     }
     setup = async () => {
 
-        await this._updateProcess({ statusCode: 1, status: 'Runing', error: null }, true)
-        this.position = this.process.position
-        if (!this.position) {
-            this.position = { urlIndex: 0, pageIndex: 0, itemIndex: 0 }
-        }
+
+
         const doc = await Category.findById(this.id).lean().exec()
         this.cates = await this.findLastCatesFromCategory(doc)
 
     }
 
-    stop = async () => {
-        if (this.browser)
-            await this.browser.close()
-        this._updateProcess({ statusCode: 0, status: 'Stopped', error: null })
-
-    }
-    delete = async () => {
-        if (this.browser)
-            await this.browser.close()
-        return await Process.findOneAndRemove({ belong: this.id }).exec()
-    }
 
 
     run = async () => {
@@ -45,7 +30,9 @@ class ProductScraper extends Scraper {
 
             return await this._run()
         } catch (err) {
-            console.log(err)
+            console.log(err.message)
+            if (err.message.match(/browser has disconnected/))
+                return
             return await this.run()
         }
     }

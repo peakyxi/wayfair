@@ -14,8 +14,8 @@ const args = [
     "--window-position=0,0",
     "--ignore-certifcate-errors",
     "--ignore-certifcate-errors-spki-list",
-    `--user-agent="${userAgent}"`,
-    `--proxy-server=${proxyServer}`
+    `--user-agent="${userAgent}"`
+    // `--proxy-server=${proxyServer}`
 ]
 
 class Scraper {
@@ -57,9 +57,13 @@ class Scraper {
             await page.goto(url, { waitUntil: "networkidle2" })
 
         } catch (err) {
-            console.log(err)
+
             if (!!err.message.match(/Navigation timeout of/))
                 return await this.goto(page, url)
+            if (err.message.match(/browser has disconnected/)) {
+                return 0
+            }
+
             return 'unhandle'
         }
 

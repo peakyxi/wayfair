@@ -19,7 +19,8 @@
     "puppeteer": "^10.1.0",
     "puppeteer-extra": "^3.1.18",
     "puppeteer-extra-plugin-proxy": "^1.0.2",
-    "puppeteer-extra-plugin-stealth": "^2.7.8"
+    "puppeteer-extra-plugin-stealth": "^2.7.8",
+    "sockjs": "^0.3.21"
   },
   "nodemonConfig": {
     "ignore": [

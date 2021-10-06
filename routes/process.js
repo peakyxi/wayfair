@@ -1,9 +1,10 @@
 
 import express from 'express'
 import Process from '../models/process.js'
-import Scrapers from '../scraping/scrapersContainer.js'
 import Product from '../models/product.js'
 import Category from '../models/category.js'
+
+
 
 
 
@@ -23,7 +24,7 @@ const findLastCatesFromCategory = async (cid, cids = []) => {
 
 (async () => {
 
-    const scrapers = await new Scrapers()
+
 
     router.get('/', (req, res) => {
         const { ids } = req.query
@@ -33,32 +34,64 @@ const findLastCatesFromCategory = async (cid, cids = []) => {
         }
         Process.find(filter)
             .populate('belong')
-            .lean()
-            .then(docs => res.send(docs))
+            .then(docs => {
+                res.send(docs)
+            })
     })
 
-    router.post('/scraping', async (req, res) => {
+    router.post('/', async (req, res) => {
         const { cid } = req.body
-        const scraper = await scrapers.new(cid)
-        res.send(scraper.process)
-        scraper.run()
+        if (!cid) return res.status(404).send({ message: "Can't find category with specific category!" })
+        let process = await Process.findOne({ belong: cid })
+        if (process) return res.status(400).send({ message: "Scraper with given category has created!" })
+        process = {
+            belong: cid,
+            statusCode: 1,
+            status: "Initializing",
+            error: null
+        }
+        Process.create(process)
+            .then(process => {
+                process.populate('belong', (err, process) => {
+                    res.send(process)
+                })
+            })
+            .catch(err => {
+                res.status(400).send({ message: err.message })
+            })
 
 
     })
-    router.post('/stop', async (req, res) => {
-        const { cid } = req.body
-        console.log(cid)
-        await scrapers.stop(cid)
+    router.put('/:pid', async (req, res) => {
+        const { pid } = req.params
+        const { status } = req.body
+        let process = await Process.findById(pid)
+        if (!process)
+            return res.status(400).send({ message: "Can't find the specific scraper!" })
+        process.status = status
+        process.updated = Date()
+        process.save()
+            .then(process => {
+                process.populate('belong', (err, process) => {
+                    res.send(process)
+                })
 
+            })
+            .catch(err => res.status(400).send(err.message))
 
-
-        res.send({ done: true })
     })
-    router.post('/delete', async (req, res) => {
+    router.delete('/:pid', async (req, res) => {
 
-        const { cid } = req.body
-        await scrapers.delete(cid)
-        res.send({ done: true })
+        const { pid } = req.params
+        const process = await Process.find({ _id: pid })
+        if (!process)
+            return res.status(400).send({ message: "Can't find the specific scraper!" })
+        Process.deleteOne({ _id: pid })
+            .then(info => res.send(info))
+            .catch(err => {
+                res.status(400).send(err.message)
+            })
+
 
     })
     router.post('/download', async (req, res) => {
